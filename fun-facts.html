@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Fun Facts - Learn Something New Every Day</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --tertiary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(255, 255, 255, 0.4);
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode {
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --card-border: rgba(255, 255, 255, 0.1);
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.5s ease;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            z-index: -2;
+            transition: background 0.5s ease;
+        }
+
+        body.dark-mode::before {
+            background: var(--dark-gradient);
+        }
+
+        /* Animated background blur effect */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(245, 87, 108, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        body.dark-mode .header h1 {
+            background: linear-gradient(135deg, #667eea, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Main Card */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 32px;
+            padding: 50px 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: scaleIn 0.5s ease-out;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Emoji and Category */
+        .fact-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .fact-emoji {
+            font-size: 3.5rem;
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .fact-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        /* Fact Text */
+        .fact-text {
+            font-size: 1.6rem;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 32px;
+            font-weight: 500;
+            animation: fadeInUp 0.6s ease-out;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Counter */
+        .counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(245, 87, 108, 0.1));
+            border-radius: 16px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .counter-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .counter-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Countdown Timer */
+        .countdown-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .countdown-timer {
+            font-weight: 700;
+            color: var(--text-primary);
+            min-width: 30px;
+            text-align: center;
+        }
+
+        /* Control Buttons */
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            grid-column: 1 / -1;
+            font-size: 1.1rem;
+            padding: 16px 32px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(245, 87, 108, 0.1));
+            border-color: rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        .btn-small {
+            padding: 10px 16px;
+            font-size: 0.85rem;
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition);
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Fade transition for facts */
+        .fade-out {
+            animation: fadeOut 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            padding: 14px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            z-index: 200;
+            animation: slideUp 0.3s ease-out;
+            font-weight: 500;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 40px 30px;
+                border-radius: 24px;
+            }
+
+            .fact-text {
+                font-size: 1.3rem;
+                min-height: 100px;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-primary {
+                grid-column: 1;
+            }
+
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                gap: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .card {
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+
+            .fact-emoji {
+                font-size: 2.5rem;
+            }
+
+            .fact-text {
+                font-size: 1.1rem;
+                line-height: 1.5;
+                min-height: 80px;
+            }
+
+            .fact-header {
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+
+            .btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+
+            .btn-primary {
+                padding: 14px 24px;
+                font-size: 1rem;
+            }
+
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                top: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span id="themeIcon">🌙</span>
+    </button>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧠 Random Fun Facts</h1>
+            <p>Learn something new every day</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card">
+            <!-- Counter -->
+            <div class="counter">
+                <span class="counter-label">Facts Viewed:</span>
+                <span class="counter-value" id="counter">1</span>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="countdown-container" id="countdownContainer" style="display: none;">
+                <span>Next fact in:</span>
+                <span class="countdown-timer" id="countdown">30</span>
+                <span>seconds</span>
+            </div>
+
+            <!-- Fact Header -->
+            <div class="fact-header">
+                <span class="fact-emoji" id="emoji">🔬</span>
+            </div>
+
+            <!-- Category Badge -->
+            <div style="text-align: center; margin-bottom: 16px;">
+                <span class="fact-category" id="category">Science</span>
+            </div>
+
+            <!-- Fact Text -->
+            <div class="fact-text" id="factText">
+                Loading an amazing fact...
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="controls">
+                <button class="btn btn-primary" id="nextBtn">
+                    <span class="btn-icon">⚡</span>
+                    Show Another Fact
+                </button>
+                <button class="btn btn-secondary btn-small" id="copyBtn">
+                    <span class="btn-icon">📋</span>
+                    Copy
+                </button>
+                <button class="btn btn-secondary btn-small" id="shareBtn">
+                    <span class="btn-icon">🔗</span>
+                    Share
+                </button>
+                <button class="btn btn-secondary btn-small" id="autoPlayBtn">
+                    <span class="btn-icon">▶️</span>
+                    Auto Play
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====================================================================
+        // Fun Facts Database with Categories and Emojis
+        // ====================================================================
+
+        const funFacts = [
+            // Science Facts
+            {
+                text: "Honey never spoils. Archaeologists have found 3,000-year-old honey in Egyptian tombs that was still edible!",
+                category: "Science",
+                emoji: "🍯"
+            },
+            {
+                text: "A single bolt of lightning contains enough energy to toast 100,000 slices of bread simultaneously.",
+                category: "Science",
+                emoji: "⚡"
+            },
+            {
+                text: "Glass is technically a liquid, not a solid. It flows extremely slowly over centuries.",
+                category: "Science",
+                emoji: "🔬"
+            },
+            {
+                text: "The human brain uses 20% of your body's total energy despite being only 2% of your body weight.",
+                category: "Science",
+                emoji: "🧠"
+            },
+            {
+                text: "Diamonds rain on Jupiter and Saturn. The extreme pressure and carbon create these precious gems.",
+                category: "Science",
+                emoji: "💎"
+            },
+            {
+                text: "Water can flow upward against gravity in extremely narrow tubes through capillary action.",
+                category: "Science",
+                emoji: "💧"
+            },
+            {
+                text: "A teaspoon of neutron star material would weigh as much as Mount Everest on Earth.",
+                category: "Science",
+                emoji: "⭐"
+            },
+            {
+                text: "Your body produces 25 million new cells every single second without you knowing it.",
+                category: "Science",
+                emoji: "🔬"
+            },
+
+            // Animal Facts
+            {
+                text: "Octopuses have three hearts: two pump blood to the gills, and one pumps it to the rest of the body.",
+                category: "Animals",
+                emoji: "🐙"
+            },
+            {
+                text: "A group of flamingos is called a 'flamboyance' because of their vibrant, showy nature.",
+                category: "Animals",
+                emoji: "🦩"
+            },
+            {
+                text: "Dolphins sleep with one eye open and keep half their brain alert to watch for danger.",
+                category: "Animals",
+                emoji: "🐬"
+            },
+            {
+                text: "Cows have best friends and can become stressed when separated from them.",
+                category: "Animals",
+                emoji: "🐄"
+            },
+            {
+                text: "A cat's purr vibrates at a frequency that can promote bone healing and growth.",
+                category: "Animals",
+                emoji: "🐱"
+            },
+            {
+                text: "Penguins propose to their partners by giving them a pebble as a gift.",
+                category: "Animals",
+                emoji: "🐧"
+            },
+            {
+                text: "Polar bears have black skin under their white fur and use it to absorb the sun's heat.",
+                category: "Animals",
+                emoji: "🐻"
+            },
+            {
+                text: "Butterflies taste with their feet to determine whether the plant they sit on is good to lay eggs on.",
+                category: "Animals",
+                emoji: "🦋"
+            },
+
+            // Space Facts
+            {
+                text: "A day on Venus is longer than its year. It takes 243 Earth days to rotate but 225 days to orbit the sun.",
+                category: "Space",
+                emoji: "🪐"
+            },
+            {
+                text: "The Sun accounts for 99.86% of all the mass in our entire solar system.",
+                category: "Space",
+                emoji: "☀️"
+            },
+            {
+                text: "There are more stars in the universe than grains of sand on all Earth's beaches and deserts combined.",
+                category: "Space",
+                emoji: "✨"
+            },
+            {
+                text: "If you could somehow stand on the surface of the Sun, your hair would instantly vaporize from the heat.",
+                category: "Space",
+                emoji: "🌞"
+            },
+            {
+                text: "Neutron stars spin so fast they can rotate 1,000 times per second.",
+                category: "Space",
+                emoji: "🌌"
+            },
+            {
+                text: "The footprints left by astronauts on the Moon will remain there for millions of years due to the lack of wind.",
+                category: "Space",
+                emoji: "🚀"
+            },
+            {
+                text: "A year on Neptune is 165 Earth years long because it's so far from the Sun.",
+                category: "Space",
+                emoji: "🪐"
+            },
+            {
+                text: "The light from distant stars we see today left those stars millions of years ago. We're looking into the past!",
+                category: "Space",
+                emoji: "🔭"
+            },
+
+            // History Facts
+            {
+                text: "The shortest war in history lasted only 38 minutes between Britain and Zanzibar in 1896.",
+                category: "History",
+                emoji: "⚔️"
+            },
+            {
+                text: "Cleopatra lived closer to the invention of the internet than to the building of the Great Pyramid.",
+                category: "History",
+                emoji: "👑"
+            },
+            {
+                text: "Oxford University is older than the Aztec Empire was when it fell.",
+                category: "History",
+                emoji: "🏛️"
+            },
+            {
+                text: "Vikings wore eyeliner for cosmetic and practical reasons—it reduced glare from snow and ice.",
+                category: "History",
+                emoji: "⚔️"
+            },
+            {
+                text: "Napoleon was actually of average height for his time at 5'7\". The myth was propaganda by the British.",
+                category: "History",
+                emoji: "🎩"
+            },
+            {
+                text: "The Great Wall of China is not visible from space with the naked eye, despite popular belief.",
+                category: "History",
+                emoji: "🏯"
+            },
+            {
+                text: "Bananas were so valuable in the 1700s that they were kept in locked boxes and displayed as luxury items.",
+                category: "History",
+                emoji: "🍌"
+            },
+            {
+                text: "The Library of Alexandria housed over 40,000 scrolls and would have been worth billions today.",
+                category: "History",
+                emoji: "📚"
+            },
+
+            // Technology Facts
+            {
+                text: "The first webcam was invented at Cambridge University to monitor a coffee pot remotely.",
+                category: "Technology",
+                emoji: "📷"
+            },
+            {
+                text: "There are more mobile phones than people on Earth—over 15 billion active devices.",
+                category: "Technology",
+                emoji: "📱"
+            },
+            {
+                text: "Google processes over 8.5 billion searches per day—that's 99,000 searches per second.",
+                category: "Technology",
+                emoji: "🔍"
+            },
+            {
+                text: "The '@' symbol in email is called different names worldwide: 'at monkey' in Italy, 'little duck' in Greece.",
+                category: "Technology",
+                emoji: "💻"
+            },
+            {
+                text: "More than 2.5 quintillion bytes of data are created every day in the modern world.",
+                category: "Technology",
+                emoji: "💾"
+            },
+            {
+                text: "The first computer bug was an actual moth found in a computer by Grace Hopper in 1947.",
+                category: "Technology",
+                emoji: "🐛"
+            },
+            {
+                text: "Bitcoin's creator, Satoshi Nakamoto, has never been publicly identified and remains anonymous.",
+                category: "Technology",
+                emoji: "₿"
+            },
+            {
+                text: "The 'QWERTY' keyboard layout was designed to slow down typing to prevent typewriter jams.",
+                category: "Technology",
+                emoji: "⌨️"
+            },
+
+            // Psychology Facts
+            {
+                text: "Your brain uses the same amount of energy whether you're thinking hard or watching TV—it's always running at 20% power.",
+                category: "Psychology",
+                emoji: "🧠"
+            },
+            {
+                text: "Smiling can actually make you happier due to the facial feedback hypothesis—muscles influence mood.",
+                category: "Psychology",
+                emoji: "😊"
+            },
+            {
+                text: "Humans are the only animals that procrastinate. Animals act on impulse or planning, not avoidance.",
+                category: "Psychology",
+                emoji: "⏱️"
+            },
+            {
+                text: "The average person spends 6 months of their lifetime waiting for red traffic lights.",
+                category: "Psychology",
+                emoji: "🚗"
+            },
+            {
+                text: "You can't sneeze with your eyes open—it's neurologically impossible due to how your brain is wired.",
+                category: "Psychology",
+                emoji: "🤧"
+            },
+            {
+                text: "People retain 10% of what they read, 20% of what they hear, but 80% of what they experience directly.",
+                category: "Psychology",
+                emoji: "📖"
+            },
+            {
+                text: "The left side of your brain is responsible for speech, while the right side is responsible for emotion.",
+                category: "Psychology",
+                emoji: "🎨"
+            },
+            {
+                text: "Laughing at your own jokes actually boosts your mood even if nobody else finds them funny.",
+                category: "Psychology",
+                emoji: "😆"
+            }
+        ];
+
+        // ====================================================================
+        // Application State
+        // ====================================================================
+
+        let state = {
+            currentFactIndex: 0,
+            viewCount: 0,
+            isAutoPlay: false,
+            autoPlayInterval: null,
+            countdownInterval: null,
+            darkMode: localStorage.getItem('darkMode') === 'true' || false
+        };
+
+        // ====================================================================
+        // DOM Elements
+        // ====================================================================
+
+        const factText = document.getElementById('factText');
+        const emoji = document.getElementById('emoji');
+        const category = document.getElementById('category');
+        const counter = document.getElementById('counter');
+        const nextBtn = document.getElementById('nextBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const autoPlayBtn = document.getElementById('autoPlayBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const countdownContainer = document.getElementById('countdownContainer');
+        const countdown = document.getElementById('countdown');
+
+        // ====================================================================
+        // Initialize Application
+        // ====================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTheme();
+            displayRandomFact();
+        });
+
+        // ====================================================================
+        // Theme Management
+        // ====================================================================
+
+        function initializeTheme() {
+            if (state.darkMode) {
+                document.body.classList.add('dark-mode');
+                themeIcon.textContent = '☀️';
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeIcon.textContent = '🌙';
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            state.darkMode = !state.darkMode;
+            localStorage.setItem('darkMode', state.darkMode);
+            initializeTheme();
+        });
+
+        // ====================================================================
+        // Fact Display Management
+        // ====================================================================
+
+        function displayRandomFact() {
+            // Clear countdown if running
+            if (state.countdownInterval) {
+                clearInterval(state.countdownInterval);
+                countdownContainer.style.display = 'none';
+            }
+
+            // Get random fact
+            state.currentFactIndex = Math.floor(Math.random() * funFacts.length);
+            const fact = funFacts[state.currentFactIndex];
+
+            // Animate out
+            factText.classList.add('fade-out');
+
+            // Update after fade out
+            setTimeout(() => {
+                factText.classList.remove('fade-out');
+                factText.textContent = fact.text;
+                emoji.textContent = fact.emoji;
+                category.textContent = fact.category;
+
+                // Increment counter
+                state.viewCount++;
+                counter.textContent = state.viewCount;
+
+                // Start countdown if auto-play is enabled
+                if (state.isAutoPlay) {
+                    startCountdown();
+                }
+            }, 300);
+        }
+
+        // ====================================================================
+        // Auto-Play Timer
+        // ====================================================================
+
+        function startCountdown() {
+            countdownContainer.style.display = 'flex';
+            let timeLeft = 30;
+            countdown.textContent = timeLeft;
+
+            if (state.countdownInterval) {
+                clearInterval(state.countdownInterval);
+            }
+
+            state.countdownInterval = setInterval(() => {
+                timeLeft--;
+                countdown.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(state.countdownInterval);
+                    displayRandomFact();
+                }
+            }, 1000);
+        }
+
+        // ====================================================================
+        // Copy to Clipboard
+        // ====================================================================
+
+        copyBtn.addEventListener('click', () => {
+            const fact = funFacts[state.currentFactIndex];
+            const textToCopy = `${fact.emoji} ${fact.category}: ${fact.text}`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast('📋 Fact copied to clipboard!');
+            }).catch(() => {
+                showToast('❌ Failed to copy. Please try again.');
+            });
+        });
+
+        // ====================================================================
+        // Web Share API
+        // ====================================================================
+
+        shareBtn.addEventListener('click', async () => {
+            const fact = funFacts[state.currentFactIndex];
+            const shareData = {
+                title: 'Random Fun Facts',
+                text: `${fact.emoji} ${fact.category}: ${fact.text}`,
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        showToast('Share cancelled');
+                    }
+                }
+            } else {
+                // Fallback for browsers without Web Share API
+                copyBtn.click();
+                showToast('🔗 Fact copied! Share the link with your friends.');
+            }
+        });
+
+        // ====================================================================
+        // Auto-Play Toggle
+        // ====================================================================
+
+        autoPlayBtn.addEventListener('click', () => {
+            state.isAutoPlay = !state.isAutoPlay;
+
+            if (state.isAutoPlay) {
+                autoPlayBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                autoPlayBtn.style.color = 'white';
+                autoPlayBtn.innerHTML = '<span class="btn-icon">⏸️</span> Pause';
+                startCountdown();
+            } else {
+                autoPlayBtn.style.background = '';
+                autoPlayBtn.style.color = '';
+                autoPlayBtn.innerHTML = '<span class="btn-icon">▶️</span> Auto Play';
+                if (state.countdownInterval) {
+                    clearInterval(state.countdownInterval);
+                }
+                countdownContainer.style.display = 'none';
+            }
+        });
+
+        // ====================================================================
+        // Next Fact Button
+        // ====================================================================
+
+        nextBtn.addEventListener('click', () => {
+            displayRandomFact();
+        });
+
+        // Keyboard shortcut: Space to show next fact
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && e.target === document.body) {
+                e.preventDefault();
+                nextBtn.click();
+            }
+        });
+
+        // ====================================================================
+        // Toast Notification
+        // ====================================================================
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // ====================================================================
+        // Keyboard Accessibility
+        // ====================================================================
+
+        nextBtn.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                nextBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
