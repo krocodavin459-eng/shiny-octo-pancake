@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Fun Facts - Discover Amazing Facts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --tertiary: #f59e0b;
+            --success: #10b981;
+            --text-dark: #1f2937;
+            --text-light: #f3f4f6;
+            --bg-light: #f9fafb;
+            --bg-dark: #111827;
+            --card-light: rgba(255, 255, 255, 0.85);
+            --card-dark: rgba(17, 24, 39, 0.85);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        body.light-mode {
+            --current-text: var(--text-dark);
+            --current-bg: var(--bg-light);
+            --current-card: var(--card-light);
+        }
+
+        body.dark-mode {
+            --current-text: var(--text-light);
+            --current-bg: var(--bg-dark);
+            --current-card: var(--card-dark);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+            color: var(--current-text);
+            transition: color 0.3s ease, background 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #581c87 50%, #0c4a6e 75%, #0a3f5e 100%);
+            background-size: 400% 400%;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            width: 50px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .theme-toggle-circle {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .theme-toggle.dark .theme-toggle-circle {
+            transform: translateX(22px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin-top: 80px;
+            animation: fade-in 0.6s ease-out;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Counter */
+        .counter {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--current-text);
+            margin-bottom: 20px;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+        }
+
+        /* Fact Card */
+        .fact-card {
+            background: var(--current-card);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            text-align: center;
+            animation: slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        @keyframes slide-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fact-emoji {
+            font-size: 64px;
+            margin-bottom: 15px;
+            animation: bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .fact-category {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .fact-text {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.6;
+            color: var(--current-text);
+            margin-bottom: 20px;
+            letter-spacing: -0.3px;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 30px;
+            animation: fade-in 0.5s ease-out 0.3s both;
+        }
+
+        .button-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        /* Buttons */
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--current-text);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        /* Timer */
+        .timer {
+            font-size: 12px;
+            color: var(--current-text);
+            opacity: 0.6;
+            margin-top: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 2px;
+            transition: width 0.1s linear;
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(16, 185, 129, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: slide-in-right 0.3s ease;
+            z-index: 2000;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes slide-in-right {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header {
+                padding: 12px 20px;
+            }
+
+            .header-title {
+                font-size: 20px;
+            }
+
+            .container {
+                margin-top: 70px;
+            }
+
+            .fact-card {
+                padding: 35px 25px;
+                min-height: 250px;
+                border-radius: 20px;
+            }
+
+            .fact-emoji {
+                font-size: 48px;
+            }
+
+            .fact-text {
+                font-size: 18px;
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 13px;
+                border-radius: 10px;
+            }
+
+            .button-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .toast {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fact-card {
+                padding: 25px 20px;
+                min-height: 220px;
+            }
+
+            .fact-emoji {
+                font-size: 40px;
+                margin-bottom: 10px;
+            }
+
+            .fact-text {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            .button-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-container {
+                gap: 10px;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <!-- Header -->
+    <div class="header">
+        <div class="header-title">✨ Random Fun Facts</div>
+        <div class="header-controls">
+            <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                <div class="theme-toggle-circle">☀️</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Counter -->
+        <div class="counter">
+            Facts viewed: <span id="counter">0</span>
+        </div>
+
+        <!-- Fact Card -->
+        <div class="fact-card">
+            <div class="fact-emoji" id="factEmoji">🧠</div>
+            <div class="fact-category" id="factCategory">Science</div>
+            <p class="fact-text" id="factText">Loading an amazing fact...</p>
+            <div id="timerSection" style="display: none;">
+                <div class="timer">
+                    Next fact in: <span id="timerCount">30</span>s
+                </div>
+                <div class="timer-bar">
+                    <div class="timer-fill" id="timerFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button Container -->
+        <div class="button-container">
+            <div class="button-row">
+                <button class="btn-primary" id="nextFactBtn" title="Get next fact">
+                    ➜ Next Fact
+                </button>
+                <button class="btn-secondary" id="copyBtn" title="Copy fact to clipboard">
+                    📋 Copy
+                </button>
+            </div>
+            <div class="button-row">
+                <button class="btn-secondary" id="shareBtn" title="Share fact">
+                    🔗 Share
+                </button>
+                <button class="btn-secondary" id="autoPlayBtn" title="Auto-play facts every 30 seconds">
+                    ⏱️ Auto (Off)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== Comprehensive Fun Facts Database =====
+        // Each fact includes: text, category, and emoji
+        const factsDatabase = [
+            {
+                text: "Honey never spoils. Archaeologists have found 3,000-year-old honey in Egyptian tombs that was still edible.",
+                category: "Science",
+                emoji: "🍯"
+            },
+            {
+                text: "Octopuses have three hearts: two pump blood to the gills, one pumps it to the rest of the body.",
+                category: "Animals",
+                emoji: "🐙"
+            },
+            {
+                text: "Venus is the only planet in our solar system that rotates clockwise.",
+                category: "Space",
+                emoji: "🪐"
+            },
+            {
+                text: "The Great Wall of China is not visible from space with the naked eye.",
+                category: "History",
+                emoji: "🏯"
+            },
+            {
+                text: "A group of flamingos is called a 'flamboyance.'",
+                category: "Animals",
+                emoji: "🦩"
+            },
+            {
+                text: "Bananas are berries, but strawberries are not.",
+                category: "Science",
+                emoji: "🍌"
+            },
+            {
+                text: "The human nose can detect over 1 trillion different scents.",
+                category: "Psychology",
+                emoji: "👃"
+            },
+            {
+                text: "Cleopatra lived closer to the invention of the internet than to the construction of the Great Pyramid.",
+                category: "History",
+                emoji: "👑"
+            },
+            {
+                text: "A day on Venus is longer than a year on Venus.",
+                category: "Space",
+                emoji: "☀️"
+            },
+            {
+                text: "Tardigrades (water bears) can survive in the vacuum of space and extreme radiation.",
+                category: "Animals",
+                emoji: "🐻"
+            },
+            {
+                text: "The human brain uses 20% of the body's energy despite being only 2% of body mass.",
+                category: "Psychology",
+                emoji: "🧠"
+            },
+            {
+                text: "Quantum computers can perform calculations that would take classical computers thousands of years.",
+                category: "Technology",
+                emoji: "💻"
+            },
+            {
+                text: "Dolphins call each other by unique names.",
+                category: "Animals",
+                emoji: "🐬"
+            },
+            {
+                text: "The first website ever created is still online and accessible.",
+                category: "Technology",
+                emoji: "🌐"
+            },
+            {
+                text: "A single bolt of lightning is hotter than the surface of the sun.",
+                category: "Science",
+                emoji: "⚡"
+            },
+            {
+                text: "Neutron stars are so dense that a teaspoon of their material would weigh as much as Mount Everest.",
+                category: "Space",
+                emoji: "⭐"
+            },
+            {
+                text: "The bookcase was invented by the Chinese during the Song Dynasty.",
+                category: "History",
+                emoji: "📚"
+            },
+            {
+                text: "Psychologists call the inability to find your car in a parking lot 'lost in the parking lot syndrome.'",
+                category: "Psychology",
+                emoji: "🚗"
+            },
+            {
+                text: "Cows have best friends and become stressed when separated.",
+                category: "Animals",
+                emoji: "🐄"
+            },
+            {
+                text: "AI language models like GPT are trained on massive amounts of internet data.",
+                category: "Technology",
+                emoji: "🤖"
+            },
+            {
+                text: "The Eiffel Tower was originally intended to be a temporary structure.",
+                category: "History",
+                emoji: "🗼"
+            },
+            {
+                text: "Mantis shrimp can see 16 types of color receptors while humans only see 3.",
+                category: "Animals",
+                emoji: "🦐"
+            },
+            {
+                text: "A person's ability to recall their dreams is enhanced by immediately thinking about them upon waking.",
+                category: "Psychology",
+                emoji: "💭"
+            },
+            {
+                text: "The first photograph ever taken was captured in 1826 and took 8 hours of exposure.",
+                category: "History",
+                emoji: "📷"
+            },
+            {
+                text: "Sound travels faster in water than in air.",
+                category: "Science",
+                emoji: "🌊"
+            },
+            {
+                text: "There are more stars in the observable universe than grains of sand on all Earth's beaches.",
+                category: "Space",
+                emoji: "✨"
+            },
+            {
+                text: "Artificial intelligence can now write poetry that's difficult to distinguish from human-written poetry.",
+                category: "Technology",
+                emoji: "📝"
+            },
+            {
+                text: "Rats laugh when tickled, and it's similar to human laughter patterns.",
+                category: "Animals",
+                emoji: "🐭"
+            },
+            {
+                text: "The Placebo Effect is so powerful that placebos can trigger measurable biological changes.",
+                category: "Psychology",
+                emoji: "💊"
+            },
+            {
+                text: "A day lasts 24 hours and 56 minutes on Mars.",
+                category: "Space",
+                emoji: "🔴"
+            },
+            {
+                text: "The Great Barrier Reef is the largest living structure on Earth.",
+                category: "Science",
+                emoji: "🪸"
+            },
+            {
+                text: "Ancient Romans used lead in their plumbing, believing lead was safe.",
+                category: "History",
+                emoji: "🏛️"
+            },
+            {
+                text: "Blockchain technology enables decentralized systems without a central authority.",
+                category: "Technology",
+                emoji: "⛓️"
+            },
+            {
+                text: "Chimpanzees use tools and can solve complex problems like humans.",
+                category: "Animals",
+                emoji: "🐵"
+            },
+            {
+                text: "Confirmation bias causes people to seek information that confirms their beliefs.",
+                category: "Psychology",
+                emoji: "🎯"
+            },
+            {
+                text: "The universe is about 13.8 billion years old.",
+                category: "Space",
+                emoji: "🌌"
+            },
+            {
+                text: "Cats have a reflective layer behind their retinas that improves night vision.",
+                category: "Animals",
+                emoji: "🐱"
+            },
+            {
+                text: "The most successful technology company was founded in a garage.",
+                category: "Technology",
+                emoji: "🔧"
+            },
+            {
+                text: "Synesthesia is a neurological condition where stimulation of one sense triggers another.",
+                category: "Psychology",
+                emoji: "🎨"
+            },
+            {
+                text: "The Rosetta Stone was the key to deciphering Egyptian hieroglyphics.",
+                category: "History",
+                emoji: "🗿"
+            },
+            {
+                text: "Water molecules from the ocean could include water that dinosaurs drank.",
+                category: "Science",
+                emoji: "💧"
+            },
+            {
+                text: "Black holes can merge, releasing gravitational waves detectable on Earth.",
+                category: "Space",
+                emoji: "🕳️"
+            },
+            {
+                text: "The concept of 'zero' wasn't widely used in Europe until the Middle Ages.",
+                category: "History",
+                emoji: "0️⃣"
+            },
+            {
+                text: "Machine learning algorithms power most modern recommendation systems.",
+                category: "Technology",
+                emoji: "📊"
+            },
+            {
+                text: "The mere exposure effect makes us like things more just by being exposed to them.",
+                category: "Psychology",
+                emoji: "👁️"
+            },
+            {
+                text: "Elephants mourn their dead and have been observed at elephant graveyards.",
+                category: "Animals",
+                emoji: "🐘"
+            },
+            {
+                text: "A single gene can be active in producing thousands of different proteins.",
+                category: "Science",
+                emoji: "🧬"
+            },
+            {
+                text: "The International Space Station orbits Earth every 90 minutes.",
+                category: "Space",
+                emoji: "🛰️"
+            },
+            {
+                text: "Virtual reality technology is being used to treat PTSD and anxiety disorders.",
+                category: "Technology",
+                emoji: "🥽"
+            },
+            {
+                text: "Owls can rotate their heads nearly 270 degrees.",
+                category: "Animals",
+                emoji: "🦉"
+            },
+            {
+                text: "The Dunning-Kruger Effect describes how incompetent people overestimate their abilities.",
+                category: "Psychology",
+                emoji: "📈"
+            },
+            {
+                text: "The oldest known recipe is for beer, dating back 5,000 years to ancient Mesopotamia.",
+                category: "History",
+                emoji: "🍺"
+            }
+        ];
+
+        // ===== State Management =====
+        let currentFactIndex = -1;
+        let sessionViewCount = 0;
+        let isAutoPlayEnabled = false;
+        let autoPlayInterval = null;
+        let timerInterval = null;
+        let remainingSeconds = 30;
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // ===== DOM Elements =====
+        const factText = document.getElementById('factText');
+        const factEmoji = document.getElementById('factEmoji');
+        const factCategory = document.getElementById('factCategory');
+        const counterElement = document.getElementById('counter');
+        const nextFactBtn = document.getElementById('nextFactBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const autoPlayBtn = document.getElementById('autoPlayBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const timerSection = document.getElementById('timerSection');
+        const timerCount = document.getElementById('timerCount');
+        const timerFill = document.getElementById('timerFill');
+        const factCard = document.querySelector('.fact-card');
+
+        // ===== Initialization =====
+        function init() {
+            // Load dark mode preference
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                document.body.classList.remove('light-mode');
+                updateThemeToggle();
+            }
+
+            // Display initial fact
+            displayRandomFact();
+
+            // Add event listeners
+            nextFactBtn.addEventListener('click', displayRandomFact);
+            copyBtn.addEventListener('click', copyFactToClipboard);
+            shareBtn.addEventListener('click', shareFact);
+            autoPlayBtn.addEventListener('click', toggleAutoPlay);
+            themeToggle.addEventListener('click', toggleTheme);
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', handleKeyPress);
+        }
+
+        // ===== Get Random Fact =====
+        function getRandomFact() {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * factsDatabase.length);
+            } while (randomIndex === currentFactIndex && factsDatabase.length > 1);
+            
+            currentFactIndex = randomIndex;
+            return factsDatabase[randomIndex];
+        }
+
+        // ===== Display Fact =====
+        function displayRandomFact() {
+            const fact = getRandomFact();
+            
+            // Update content with fade animation
+            factCard.style.animation = 'none';
+            setTimeout(() => {
+                factText.textContent = fact.text;
+                factEmoji.textContent = fact.emoji;
+                factCategory.textContent = fact.category;
+                factCard.style.animation = '';
+            }, 10);
+
+            // Increment counter
+            sessionViewCount++;
+            updateCounter();
+
+            // Reset timer if auto-play is enabled
+            if (isAutoPlayEnabled) {
+                resetAutoPlayTimer();
+            }
+        }
+
+        // ===== Copy to Clipboard =====
+        function copyFactToClipboard() {
+            const text = factText.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Fact copied to clipboard!');
+            }).catch(() => {
+                showToast('Failed to copy fact');
+            });
+        }
+
+        // ===== Share Fact =====
+        function shareFact() {
+            const text = factText.textContent;
+            const category = factCategory.textContent;
+            const shareData = {
+                title: 'Fun Fact',
+                text: `${factEmoji.textContent} [${category}] ${text}`,
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => {
+                    // Share API not available
+                    showToast('Share not supported on this device');
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(shareData.text);
+                showToast('🔗 Fact link copied! Share manually.');
+            }
+        }
+
+        // ===== Auto-Play Feature =====
+        function toggleAutoPlay() {
+            isAutoPlayEnabled = !isAutoPlayEnabled;
+            
+            if (isAutoPlayEnabled) {
+                autoPlayBtn.textContent = '⏸️ Auto (On)';
+                autoPlayBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                autoPlayBtn.style.color = 'white';
+                autoPlayBtn.classList.remove('btn-secondary');
+                autoPlayBtn.classList.add('btn-primary');
+                timerSection.style.display = 'block';
+                resetAutoPlayTimer();
+            } else {
+                autoPlayBtn.textContent = '⏱️ Auto (Off)';
+                autoPlayBtn.style.background = '';
+                autoPlayBtn.style.color = '';
+                autoPlayBtn.classList.add('btn-secondary');
+                autoPlayBtn.classList.remove('btn-primary');
+                timerSection.style.display = 'none';
+                clearInterval(autoPlayInterval);
+                clearInterval(timerInterval);
+            }
+        }
+
+        // ===== Reset Auto-Play Timer =====
+        function resetAutoPlayTimer() {
+            clearInterval(autoPlayInterval);
+            clearInterval(timerInterval);
+            remainingSeconds = 30;
+
+            autoPlayInterval = setInterval(() => {
+                displayRandomFact();
+                remainingSeconds = 30;
+                updateTimerUI();
+            }, 30000);
+
+            timerInterval = setInterval(() => {
+                remainingSeconds--;
+                if (remainingSeconds < 0) remainingSeconds = 0;
+                updateTimerUI();
+            }, 1000);
+
+            updateTimerUI();
+        }
+
+        // ===== Update Timer UI =====
+        function updateTimerUI() {
+            timerCount.textContent = remainingSeconds;
+            const percentage = (remainingSeconds / 30) * 100;
+            timerFill.style.width = percentage + '%';
+        }
+
+        // ===== Update Counter =====
+        function updateCounter() {
+            counterElement.textContent = sessionViewCount;
+        }
+
+        // ===== Show Toast Notification =====
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slide-in-right 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // ===== Theme Toggle =====
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('darkMode', isDarkMode);
+            
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                document.body.classList.remove('light-mode');
+            } else {
+                document.body.classList.add('light-mode');
+                document.body.classList.remove('dark-mode');
+            }
+            
+            updateThemeToggle();
+        }
+
+        // ===== Update Theme Toggle Button =====
+        function updateThemeToggle() {
+            const circle = themeToggle.querySelector('.theme-toggle-circle');
+            if (isDarkMode) {
+                themeToggle.classList.add('dark');
+                circle.textContent = '🌙';
+            } else {
+                themeToggle.classList.remove('dark');
+                circle.textContent = '☀️';
+            }
+        }
+
+        // ===== Keyboard Shortcuts =====
+        function handleKeyPress(e) {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                displayRandomFact();
+            }
+            if (e.code === 'KeyC' && e.ctrlKey) {
+                e.preventDefault();
+                copyFactToClipboard();
+            }
+        }
+
+        // ===== Start Application =====
+        init();
+    </script>
+</body>
+</html>
